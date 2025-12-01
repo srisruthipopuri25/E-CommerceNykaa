@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
+
 
 export default function Productlisting() {
   const [products, setProducts] = useState([]);
@@ -34,10 +36,12 @@ export default function Productlisting() {
               <p className="mb-4 font-semibold text-green-700">
                 Price: ${item.price}
               </p>
+                 <Link href={`/products/${item.id}`}> 
 
               <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
                 View Details
               </button>
+              </Link>
             </div>
           </div>
         ))}

@@ -1,13 +1,17 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import Loginmodal from './components/loginmodal';
+import Loginmodal from '@/components/loginmodal';
+import useCartStore from '@/store/cartstore';
+import { Cardo } from "next/font/google";
 
 export default function Navbar() {
     const [signup, setsignup] = useState(false)
     function toggle() {
         signup ? setsignup(false) : setsignup(true)
     }
+  const cart = useCartStore((state) => state.cart);
+
     return (
         <nav className="sticky top-0 z-50 bg-white shadow">
             <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -61,7 +65,7 @@ export default function Navbar() {
                             d="M6 8V6a6 6 0 1112 0v2m3 0H3l1.5 12h15L21 8z"
                         />
                     </svg>
-
+                <div>{cart.length}</div>
 
                 </div>
             </div>
