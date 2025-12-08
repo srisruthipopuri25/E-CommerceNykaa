@@ -1,21 +1,14 @@
 "use client";
-import axios from 'axios';
 import { useState } from 'react';
 
-export default function LoginModal({ toggle }) {
+import useloginstore from "@/store/loginstore";
+
+export default function LoginModal({}) {
     const [user, setuser] = useState(null)
-
-    function login() {
-        axios.post('https://dummyjson.com/auth/login', {
-            headers: { 'Content-Type': 'application/json' },
-            username: 'emilys',
-            password: 'emilyspass',
-        })
-            .then(res => setuser(res.data))
-            .catch(error => console.log(error))
-    }
-
-
+    const login = useloginstore((s) => s.login)
+    const toggle=useloginstore((state)=>state.toggle)
+    const setusername = useloginstore((state)=>state.setusername)
+    
 
     return (
         <div
@@ -38,7 +31,7 @@ export default function LoginModal({ toggle }) {
                     {/* <button className="w-full py-3 border rounded-lg font-medium flex justify-between px-3">
                         Sign in with Mobile / Email <span>→</span>
                     </button> */}
-                    <input className="border border-blue-500 w-full py-3 border rounded-lg font-medium flex justify-between px-3" type="text" placeholder="6666666" />
+                    <input onChange={e => setusername(e.target.value)} className="border border-blue-500 w-full py-3 border rounded-lg font-medium flex justify-between px-3" type="text" placeholder="6666666" />
 
                     <button onClick={login} className="w-full py-3 border rounded-lg font-medium flex justify-between px-3">
                         Login <span></span>

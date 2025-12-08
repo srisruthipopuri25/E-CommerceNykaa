@@ -4,13 +4,15 @@ import { useState } from "react";
 import Loginmodal from '@/components/loginmodal';
 import useCartStore from '@/store/cartstore';
 import { Cardo } from "next/font/google";
+import useloginstore from "@/store/loginstore";
 
 export default function Navbar() {
-    const [signup, setsignup] = useState(false)
-    function toggle() {
-        signup ? setsignup(false) : setsignup(true)
-    }
-  const cart = useCartStore((state) => state.cart);
+    const signup = useloginstore((state) => state.signup)
+    const cart = useCartStore((state) => state.cart)
+    const toggle = useloginstore((state) => state.toggle)
+    const username = useloginstore((state) => state.username)
+    const logout=useloginstore((state)=>state.logout)
+
 
     return (
         <nav className="sticky top-0 z-50 bg-white shadow">
@@ -44,28 +46,35 @@ export default function Navbar() {
                     <div>
                         <Link href="/contact" className="hover:text-blue-600">Contact</Link>
                     </div>
-                    <button onClick={toggle} className="bg-gray-500 hover:bg-gray-700 text-white font-bold px-4  rounded">
-                        Signup
-                    </button>
-                    {signup ? <Loginmodal toggle={toggle} ></Loginmodal> : ""}
+                    {username ? <div onClick={logout} className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-400"> {username[0]}
+                    </div> : <button onClick={toggle} className="bg-gray-500 hover:bg-gray-700 text-white font-bold px-4  rounded">
+                        Signup</button>
+                    }
+
+
+
+                    {signup ? <Loginmodal></Loginmodal> : ""}
 
                     <input className="border border-blue-500 rounded-lg px-2" placeholder="Search" type="text" />
-
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6 8V6a6 6 0 1112 0v2m3 0H3l1.5 12h15L21 8z"
-                        />
-                    </svg>
-                <div>{cart.length}</div>
+                    <div>
+                        <Link href="/cart" >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.5"
+                                stroke="currentColor"
+                                className="w-6 h-6"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M6 8V6a6 6 0 1112 0v2m3 0H3l1.5 12h15L21 8z"
+                                />
+                            </svg>
+                        </Link>
+                    </div>
+                    <div>{cart.length}</div>
 
                 </div>
             </div>
