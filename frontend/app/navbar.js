@@ -5,13 +5,15 @@ import Loginmodal from '@/components/loginmodal';
 import useCartStore from '@/store/cartstore';
 import { Cardo } from "next/font/google";
 import useloginstore from "@/store/loginstore";
-
+import Loggedoutmodal from '@/components/loggedoutmodal';
 export default function Navbar() {
     const signup = useloginstore((state) => state.signup)
     const cart = useCartStore((state) => state.cart)
     const toggle = useloginstore((state) => state.toggle)
     const username = useloginstore((state) => state.username)
     const logout=useloginstore((state)=>state.logout)
+    const loggedoutclicked = useloginstore((state)=>state.loggedoutclicked)
+    const loggedoutmodal = useloginstore((state)=>state.loggedoutmodal)
 
 
     return (
@@ -46,7 +48,7 @@ export default function Navbar() {
                     <div>
                         <Link href="/contact" className="hover:text-blue-600">Contact</Link>
                     </div>
-                    {username ? <div onClick={logout} className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-400"> {username[0]}
+                    {username ? <div onClick={loggedoutmodal} className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-400"> {username[0]}
                     </div> : <button onClick={toggle} className="bg-gray-500 hover:bg-gray-700 text-white font-bold px-4  rounded">
                         Signup</button>
                     }
@@ -54,6 +56,7 @@ export default function Navbar() {
 
 
                     {signup ? <Loginmodal></Loginmodal> : ""}
+                     {loggedoutclicked ? <Loggedoutmodal></Loggedoutmodal> : ""}
 
                     <input className="border border-blue-500 rounded-lg px-2" placeholder="Search" type="text" />
                     <div>

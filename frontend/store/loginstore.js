@@ -5,6 +5,7 @@ const useloginstore = create((set,get) => ({
     isloggedin: false,
     username: null,
     signup: false,
+    loggedoutclicked: false,
     toggle: () => {
         set((state) => ({
             signup: !state.signup
@@ -18,7 +19,14 @@ const useloginstore = create((set,get) => ({
     },
     logout : () =>{
         set((state) => ({
-            username:null
+            username:null,
+            loggedoutclicked:false
+        }))
+    },
+    //to hide/show logout modal
+    loggedoutmodal:()=>{
+        set((state)=>({
+            loggedoutclicked: !state.loggedoutclicked
         }))
     },
 
