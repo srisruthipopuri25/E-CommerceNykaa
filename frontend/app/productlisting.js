@@ -1,15 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import useproductstore from "@/store/productstore";
 
 
 export default function Productlisting() {
-  const [products, setProducts] = useState([]);
+  
+      const products = useproductstore((state) => state.products)
+            const getproducts = useproductstore((state) => state.getproducts)
+
+
 
   useEffect(() => {
-    fetch("https://dummyjson.com/products")
-      .then((res) => res.json())
-      .then((data) => setProducts(data.products));
+   getproducts();
   }, []);
 
   return (
