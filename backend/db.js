@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
-const mongoURI = "mongodb+srv://srisruthipopuri:Atchu77777@nykaa.8vv9hop.mongodb.net/?appName=nykaa"// replace with your DB name
+const mongoURI = "mongodb+srv://srisruthipopuri:Atchu77777@nykaa.8vv9hop.mongodb.net/nykaa?appName=nykaa"// replace with your DB name
+
 
 mongoose
   .connect(mongoURI)
