@@ -5,16 +5,15 @@ const useProductStore = create((set) => ({
   products: [],
   product: null,
 
-  getProducts: () =>
-    api
-      .get("/products")
-      .then((res) => res.data)
-      .then((data) => {
-        set(() => ({
-          products: data.products,
-        }));
-      })
-      .catch((error) => console.log(error)),
+ getProducts: async () => {
+  try {
+    const res = await api.get("/products");
+    set({ products: res.data.products });
+  } catch (error) {
+    console.log(error);
+  }
+},
+
 
   getSingleProduct: (id) =>
     api
