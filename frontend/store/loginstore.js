@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axios from 'axios';
-import api from "@/lib/axios";
+import api from "@/store/axios";
+
 
 const useloginstore = create((set,get) => ({
     isloggedin: false,

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import api from "@/lib/axios";
+import api from "@/store/axios";
 
 const useProductStore = create((set) => ({
   products: [],
