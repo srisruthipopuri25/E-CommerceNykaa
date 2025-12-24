@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://e-commerce-nykaa-backend.vercel.app",
+  // baseURL: "http://localhost:5000/api",
+  baseURL: "https://e-commerce-nykaa-backend.vercel.app/api",
   headers: {
     "Content-Type": "application/json",
   },

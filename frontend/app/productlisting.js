@@ -10,7 +10,7 @@ export default function ProductListing() {
 
   useEffect(() => {
     getProducts();
-  }, [getProducts]);
+  }, []);
 
   return (
     <div className="p-6">

@@ -1,34 +1,42 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const cors = require("cors");
 
 // Connect to MongoDB
 require("./db");
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var productsRouter = require("./routes/products");
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+const productsRouter = require("./routes/products");
 
-var app = express();
+const app = express();
 
 /**
  * CORS Configuration
- * (Adjust origin for production)
+ * Only allow specific origins
  */
-app.use(function (req, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-  );
-  next();
-});
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://e-commerce-nykaa.vercel.app"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow non-browser clients
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = "The CORS policy for this site does not allow access from the specified Origin.";
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"]
+}));
+
+// Preflight OPTIONS
+app.options("*", cors());
 
 /**
  * Middlewares
@@ -40,16 +48,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 /**
- * Routes
+ * API Routes (Vercel prefers /api/*)
  */
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/products", productsRouter);
+app.use("/api", indexRouter);       // for generic routes
+app.use("/api/users", usersRouter);
+app.use("/api/products", productsRouter);
 
 /**
  * 404 Handler (API-style)
  */
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   res.status(404).json({
     success: false,
     message: "Route not found"
@@ -57,9 +65,9 @@ app.use(function (req, res, next) {
 });
 
 /**
- * Global Error Handler (NO res.render)
+ * Global Error Handler
  */
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   res.status(err.status || 500).json({
     success: false,
     message: err.message || "Internal Server Error"
