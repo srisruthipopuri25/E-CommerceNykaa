@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from 'axios';
+import api from "@/lib/axios";
 
 const useloginstore = create((set,get) => ({
     isloggedin: false,
@@ -31,19 +32,18 @@ const useloginstore = create((set,get) => ({
     },
 
     login: (data) => {
-        axios.post('https://dummyjson.com/auth/login', {
-            headers: { 'Content-Type': 'application/json' },
-            username: 'emilys',
-            password: 'emilyspass',
-        })
-            .then(res => res.data)
-            .then(()=>get().toggle())
-            .catch(error => console.log(error))
+  api.post("/auth/login", {
+      username: data.username,
+      password: data.password,
+    })
+    .then((res) => res.data)
+    .then(() => get().toggle())
+    .catch((error) => console.log(error));
 
-        set(() => ({
-            isloggedin: true,
-        }))
-    },
+  set(() => ({
+    isloggedin: true,
+  }));
+},
 }))
 
 export default useloginstore
