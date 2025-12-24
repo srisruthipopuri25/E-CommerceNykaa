@@ -1,29 +1,31 @@
 import { create } from "zustand";
-import axios from "axios";
-const useproductstore = create((set) => ({
-    products: [],
-    product: [],
-    getproducts: () =>
-        axios.get("http://localhost:5000/products")
-            .then((res) => res.data)
-            .then((data) => {
-                set((state) => ({
+import api from "@/lib/axios";
 
-                    products: data.products
-                }))
-            }),
+const useProductStore = create((set) => ({
+  products: [],
+  product: null,
 
-    getSingleProduct: (id) =>
-        axios.get(`http://localhost:5000/products/${id}`)
-            .then((res) => res.data)
-            .then((data) => {
-                set((state) => ({
+  getProducts: () =>
+    api
+      .get("/products")
+      .then((res) => res.data)
+      .then((data) => {
+        set(() => ({
+          products: data.products,
+        }));
+      })
+      .catch((error) => console.log(error)),
 
-                    product: data.product
-                }))
-            })
+  getSingleProduct: (id) =>
+    api
+      .get(`/products/${id}`)
+      .then((res) => res.data)
+      .then((data) => {
+        set(() => ({
+          product: data.product,
+        }));
+      })
+      .catch((error) => console.log(error)),
+}));
 
-
-}))
-export default useproductstore;
-
+export default useProductStore;
