@@ -1,7 +1,6 @@
 import axios from "axios";
 import Link from "next/link";
-import api from "@/lib/axios";
-import { notFound } from "next/navigation";
+import api from "@/store/axios";
 import AddToCartButton from "@/components/addtocartbutton";
 
 export default async function ProductDetails({ params }) {
