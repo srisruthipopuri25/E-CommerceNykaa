@@ -1,18 +1,20 @@
 import axios from "axios";
 import Link from "next/link";
+import api from "@/lib/axios";
 import { notFound } from "next/navigation";
 import AddToCartButton from "@/components/addtocartbutton";
 
 export default async function ProductDetails({ params }) {
   const { id } = await params;
 
-  // fetch product using .then() instead of try/catch
-  let product = await axios.get(`https://dummyjson.com/products/${id}`)
-    .then((res) => res.data)
-    .catch((err) => {
-      console.error("Product fetch failed:", err.message);
-      return null; // return null so we can handle 404
-    });
+let product = await api
+  .get(`/products/${id}`)
+  .then((res) => res.data)
+  .catch((err) => {
+    console.error("Product fetch failed:", err.message);
+    return null;
+  });
+
 
   // If product not found → show 404
   if (!product || !product.id) {
