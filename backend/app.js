@@ -10,6 +10,7 @@ require("./db");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const productsRouter = require("./routes/products");
+const recommendationAI = require("./routes/recomendedproducts");
 
 const app = express();
 
@@ -53,6 +54,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api", indexRouter);       // for generic routes
 app.use("/api/users", usersRouter);
 app.use("/api/products", productsRouter);
+app.use("/api/recommendations",recommendationAI);
 
 /**
  * 404 Handler (API-style)

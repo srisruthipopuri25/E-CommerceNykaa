@@ -5,18 +5,18 @@ import AddToCartButton from "@/components/addtocartbutton";
 export default async function ProductDetails({ params }) {
   const { id } = await params;
 
-let product = await api
-  .get(`/products/${id}`)
-  .then((res) => res.data)
-  .catch((err) => {
-    console.error("Product fetch failed:", err.message);
-    return null;
-  });
+  let product = await api
+    .get(`/products/${id}`)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.error("Product fetch failed:", err.message);
+      return null;
+    });
 
 
   // If product not found → show 404
-  if (!product || !product.id) {
-    return <p>Sruthi</p>
+  if (!product || !product._id) {
+    return <p>404 Not found    </p>
   }
 
   return (
@@ -35,7 +35,7 @@ let product = await api
               className="w-full h-80 object-cover"
             />
           </div>
-          </div>
+        </div>
         {/* DETAILS */}
         <div className="lg:col-span-2">
           <h1 className="text-3xl font-bold mb-2">{product.title}</h1>
@@ -121,7 +121,7 @@ let product = await api
 
           {/* BUTTONS */}
           <div className="flex gap-3">
-           
+
             <AddToCartButton product={product}></AddToCartButton>
 
             <button className="px-6 py-3 border rounded-lg hover:bg-gray-50">
@@ -162,7 +162,7 @@ let product = await api
               product.reviews.map((item, index) => (
                 <div key={index} className="p-4 border rounded-lg mb-3">
                   <div className="flex justify-between items-center mb-1">
-                    <div className="font-semibold">{item.reviewerName?? `Reviewer ${index + 1}`}</div>
+                    <div className="font-semibold">{item.reviewerName ?? `Reviewer ${index + 1}`}</div>
                     <div className="text-yellow-600">⭐ {item.rating ?? product.rating}</div>
                   </div>
                   <div className="text-gray-700">{item.comment ?? item.review ?? "—"}</div>
