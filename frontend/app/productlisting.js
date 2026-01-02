@@ -39,7 +39,7 @@ export default function ProductListing() {
                 Price: ${item.price}
               </p>
 
-              <Link href={`/products/${item.id}`}>
+              <Link href={`/products/${item._id}`}>
                 <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
                   View Details
                 </button>

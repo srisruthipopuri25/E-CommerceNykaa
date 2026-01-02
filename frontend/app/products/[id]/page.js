@@ -1,27 +1,34 @@
+"use client";
+
+import { useEffect, use } from "react";
 import Link from "next/link";
-import api from "@/store/axios";
 import AddToCartButton from "@/components/addtocartbutton";
+import useProductStore from "@/store/productstore";
 
-export default async function ProductDetails({ params }) {
-  const { id } = await params;
+export default function ProductDetails({ params }) {
+  const { id } = use(params);
 
-  let product = await api
-    .get(`/products/${id}`)
-    .then((res) => res.data)
-    .catch((err) => {
-      console.error("Product fetch failed:", err.message);
-      return null;
-    });
+  const product = useProductStore((state) => state.product);
+  const getSingleProduct = useProductStore((state) => state.getSingleProduct);
 
+  useEffect(() => {
+    getSingleProduct(id);
+  }, [id, getSingleProduct]);
 
-  // If product not found → show 404
-  if (!product || !product._id) {
-    return <p>404 Not found    </p>
+  if (!product) {
+    return <p>Loading...</p>;
+  }
+
+  if (!product._id) {
+    return <p>404 Not Found</p>;
   }
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <Link href="/" className="inline-block mb-6 text-sm text-blue-600 hover:underline">
+      <Link
+        href="/"
+        className="inline-block mb-6 text-sm text-blue-600 hover:underline"
+      >
         ← Back to products
       </Link>
 
@@ -43,7 +50,9 @@ export default async function ProductDetails({ params }) {
           <p className="text-gray-600 mb-4">{product.description}</p>
 
           <div className="flex items-center gap-4 mb-4">
-            <div className="text-2xl font-bold text-green-700">${product.price}</div>
+            <div className="text-2xl font-bold text-green-700">
+              ${product.price}
+            </div>
 
             {product.discountPercentage != null && (
               <div className="text-sm font-semibold text-red-500">
@@ -51,7 +60,9 @@ export default async function ProductDetails({ params }) {
               </div>
             )}
 
-            <div className="ml-auto text-sm text-yellow-600">⭐ {product.rating}</div>
+            <div className="ml-auto text-sm text-yellow-600">
+              ⭐ {product.rating}
+            </div>
           </div>
 
           {/* TOP SPECS */}
@@ -68,7 +79,11 @@ export default async function ProductDetails({ params }) {
 
             <div>
               <div className="text-sm text-gray-500">Stock</div>
-              <div className={`font-medium ${product.stock > 0 ? "text-green-600" : "text-red-600"}`}>
+              <div
+                className={`font-medium ${
+                  product.stock > 0 ? "text-green-600" : "text-red-600"
+                }`}
+              >
                 {product.stock} available
               </div>
             </div>
@@ -96,12 +111,16 @@ export default async function ProductDetails({ params }) {
           {/* INFO SECTIONS */}
           <div className="mb-6">
             <div className="text-sm text-gray-500">Warranty</div>
-            <div className="font-medium">{product.warrantyInformation ?? "—"}</div>
+            <div className="font-medium">
+              {product.warrantyInformation ?? "—"}
+            </div>
           </div>
 
           <div className="mb-6">
             <div className="text-sm text-gray-500">Shipping</div>
-            <div className="font-medium">{product.shippingInformation ?? "—"}</div>
+            <div className="font-medium">
+              {product.shippingInformation ?? "—"}
+            </div>
           </div>
 
           <div className="mb-6">
@@ -112,7 +131,10 @@ export default async function ProductDetails({ params }) {
           {product.tags?.length > 0 && (
             <div className="mb-6 flex flex-wrap gap-2">
               {product.tags.map((item, index) => (
-                <span key={index} className="px-3 py-1 bg-gray-100 rounded-full text-sm">
+                <span
+                  key={index}
+                  className="px-3 py-1 bg-gray-100 rounded-full text-sm"
+                >
                   #{item}
                 </span>
               ))}
@@ -121,7 +143,6 @@ export default async function ProductDetails({ params }) {
 
           {/* BUTTONS */}
           <div className="flex gap-3">
-
             <AddToCartButton product={product}></AddToCartButton>
 
             <button className="px-6 py-3 border rounded-lg hover:bg-gray-50">
@@ -162,10 +183,16 @@ export default async function ProductDetails({ params }) {
               product.reviews.map((item, index) => (
                 <div key={index} className="p-4 border rounded-lg mb-3">
                   <div className="flex justify-between items-center mb-1">
-                    <div className="font-semibold">{item.reviewerName ?? `Reviewer ${index + 1}`}</div>
-                    <div className="text-yellow-600">⭐ {item.rating ?? product.rating}</div>
+                    <div className="font-semibold">
+                      {item.reviewerName ?? `Reviewer ${index + 1}`}
+                    </div>
+                    <div className="text-yellow-600">
+                      ⭐ {item.rating ?? product.rating}
+                    </div>
                   </div>
-                  <div className="text-gray-700">{item.comment ?? item.review ?? "—"}</div>
+                  <div className="text-gray-700">
+                    {item.comment ?? item.review ?? "—"}
+                  </div>
                 </div>
               ))
             )}
