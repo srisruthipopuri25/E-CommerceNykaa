@@ -1,13 +1,14 @@
-import { create } from "zustand";
-import api from "@/store/axios";
+import { create } from 'zustand';
+import api from '@/store/axios';
 
 const useProductStore = create((set) => ({
   products: [],
   product: null,
+  recommendedproducts: [],
 
   getProducts: async () => {
     try {
-      const res = await api.get("/products");
+      const res = await api.get('/products');
       set({ products: res.data.products });
     } catch (error) {
       console.log(error);
@@ -23,7 +24,16 @@ const useProductStore = create((set) => ({
           product: data,
         });
       })
-      .catch((error) => console.error("Product fetch failed:", error)),
+      .catch((error) => console.error('Product fetch failed:', error)),
+
+  getRecommendedProducts: async () => {
+    try {
+      const res = await api.get('/recommendedproducts/2');
+      set({ recommendedproducts: res.data.recommendations || [] });
+    } catch (err) {
+      console.error('Fetch recommendations failed', err);
+    }
+  },
 }));
 
 export default useProductStore;

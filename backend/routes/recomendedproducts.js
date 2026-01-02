@@ -1,61 +1,63 @@
-const express = require("express");
-const redis = require("../config/redis");
-const Product = require("../models/products");
-const recommendationAI = require("../AI/Productrecommendation");
+const express = require('express');
+const redis = require('../config/redis');
+const Product = require('../models/products');
+const recommendationAI = require('../AI/Productrecommendation');
 
 const router = express.Router();
 
-router.get("/:userId", async (req, res) => {
-    try {
-        const { userId } = req.params;
-        const cacheKey = `ai:recommendations:${userId}`;
+router.get('/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const cacheKey = `ai:recommendations:${userId}`;
 
-        const cached = await redis.get(cacheKey);
-        if (cached) {
-            return res.json({
-                source: "redis",
-                recommendations: JSON.parse(cached),
-            });
-        }
+    // const cached = await redis.get(cacheKey);
+    // if (cached) {
+    //       console.log("⚡ Served from Redis");
 
-        const viewedIds = await redis.lrange(
-            `user:views:${userId}`,
-            0,
-            -1
-        );
+    //   return res.json({
+    //     source: "redis",
+    //     recommendations: JSON.parse(cached),
+    //   });
+    // }
 
-        const viewedProducts = viewedIds.length
-            ? await Product.find(
-                { _id: { $in: viewedIds } },
-                { title: 1 }
-            )
-            : [];
+    const viewedIds = await redis.lrange(`user:views:${userId}`, 0, -1);
+    const viewedProducts = await Product.find(
+      { _id: { $in: viewedIds } },
+      { title: 1 }
+    );
 
-        const userHistory = viewedProducts.map(p => p.title);
+    const userHistory = viewedProducts.map((p) => p.title);
 
-        const allProducts = await Product.find({}, { title: 1 });
-        const productNames = allProducts.map(p => p.title);
+    const allProducts = await Product.find({}, { title: 1 });
+    const productNames = allProducts.map((p) => p.title);
 
-        const recommendations = await recommendationAI(
-            userHistory,
-            productNames
-        );
+    let recommendations = await recommendationAI(userHistory, productNames);
 
-        await redis.set(
-            cacheKey,
-            JSON.stringify(recommendations),
-            "EX",
-            600
-        );
+    if (!recommendations || recommendations.length === 0) {
+      const fallback = await Product.find({}).sort({ rating: -1 }).limit(5);
 
-        res.json({
-            source: "gemini",
-            recommendations,
-        });
-    } catch (err) {
-        console.error("Recommendation Error:", err);
-        res.status(500).json({ message: "Recommendation failed" });
+      return res.json({
+        source: 'fallback',
+        recommendations: fallback,
+      });
     }
+
+    await redis.set(cacheKey, JSON.stringify(recommendations), 'EX', 600);
+
+    res.json({
+      source: 'gemini',
+      recommendations,
+    });
+  } catch (err) {
+    console.error(err);
+
+    const fallback = await Product.find({}).sort({ rating: -1 }).limit(5);
+
+    res.json({
+      source: 'fallback',
+      recommendations: fallback,
+    });
+  }
 });
 
 module.exports = router;

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import Link from "next/link";
-import useProductStore from "@/store/productstore";
+import { useEffect } from 'react';
+import Link from 'next/link';
+import useProductStore from '@/store/productstore';
 
 export default function ProductListing() {
   const products = useProductStore((state) => state.products);
@@ -14,6 +14,7 @@ export default function ProductListing() {
 
   return (
     <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4">All Products</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((item) => (
           <div

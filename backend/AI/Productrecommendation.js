@@ -1,15 +1,11 @@
 const { GoogleGenAI } = require("@google/genai");
 
 const genAI = new GoogleGenAI({
-    apiKey: "AIzaSyAlEkO7WYoH5GMrxTXxji4tNraMPGNDSF4",
+  apiKey: "AIzaSyAlEkO7WYoH5GMrxTXxji4tNraMPGNDSF4",
 });
 
 async function recommendationAI(userHistory, allProducts) {
-    const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
-    });
-
-    const prompt = `
+  const prompt = `
 User recently viewed:
 ${userHistory.length ? userHistory.join(", ") : "No history"}
 
@@ -18,26 +14,22 @@ ${allProducts.join(", ")}
 
 Task:
 Recommend 5 relevant products.
-Return ONLY a JSON array of product names.
+Return ONLY a valid JSON array of product titles.
 `;
 
-    const result = await model.generateContent({
-        contents: [
-            {
-                role: "user",
-                parts: [{ text: prompt }],
-            },
-        ],
-    });
+  const result = await genAI.models.generateContent({
 
-    const text = result.response.text();
+    model: "gemini-2.5-flash",
+    contents: prompt,
+  });
 
-    try {
-        return JSON.parse(text);
-    } catch (err) {
-        console.error("Gemini JSON parse error:", text);
-        return [];
-    }
+  const text = result.text;
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return [];
+  }
 }
 
 module.exports = recommendationAI;
