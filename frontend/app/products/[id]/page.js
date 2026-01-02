@@ -33,7 +33,6 @@ export default function ProductDetails({ params }) {
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* IMAGES */}
         <div className="lg:col-span-1">
           <div className="border rounded-xl overflow-hidden">
             <img
@@ -43,7 +42,6 @@ export default function ProductDetails({ params }) {
             />
           </div>
         </div>
-        {/* DETAILS */}
         <div className="lg:col-span-2">
           <h1 className="text-3xl font-bold mb-2">{product.title}</h1>
 
@@ -61,11 +59,11 @@ export default function ProductDetails({ params }) {
             )}
 
             <div className="ml-auto text-sm text-yellow-600">
-              ⭐ {product.rating}
+               {product.rating}
             </div>
           </div>
 
-          {/* TOP SPECS */}
+         
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
             <div>
               <div className="text-sm text-gray-500">Brand</div>
@@ -108,7 +106,7 @@ export default function ProductDetails({ params }) {
             </div>
           </div>
 
-          {/* INFO SECTIONS */}
+         
           <div className="mb-6">
             <div className="text-sm text-gray-500">Warranty</div>
             <div className="font-medium">
@@ -141,7 +139,7 @@ export default function ProductDetails({ params }) {
             </div>
           )}
 
-          {/* BUTTONS */}
+     
           <div className="flex gap-3">
             <AddToCartButton product={product}></AddToCartButton>
 
@@ -150,7 +148,7 @@ export default function ProductDetails({ params }) {
             </button>
           </div>
 
-          {/* META */}
+         
           <div className="mt-8 text-sm text-gray-500">
             <div>Barcode: {product.meta?.barcode ?? "—"}</div>
             <div>
@@ -173,7 +171,6 @@ export default function ProductDetails({ params }) {
             </div>
           </div>
 
-          {/* REVIEWS */}
           <div className="mt-10">
             <h2 className="text-2xl font-bold mb-4">Customer reviews</h2>
 

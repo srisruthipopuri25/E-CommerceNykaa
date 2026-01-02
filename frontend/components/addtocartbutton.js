@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import useCartStore from "@/store/cartstore"; // adjust alias if needed
+import useCartStore from '@/store/cartstore';
 
 export default function AddToCartButton({ product }) {
   const addToCart = useCartStore((s) => s.addToCart);

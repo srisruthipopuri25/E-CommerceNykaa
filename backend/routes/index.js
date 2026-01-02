@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home API */
-router.get('/', function(req, res) {
+router.get('/', function (req, res) {
   res.json({
     success: true,
-    message: 'Backend API is running'
+    message: 'Backend API is running',
   });
 });
 

@@ -25,7 +25,6 @@ const useloginstore = create((set,get) => ({
             loggedoutclicked:false
         }))
     },
-    //to hide/show logout modal
     loggedoutmodal:()=>{
         set((state)=>({
             loggedoutclicked: !state.loggedoutclicked
